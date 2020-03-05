@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlMove : MonoBehaviour
 {
@@ -9,10 +10,13 @@ public class PlMove : MonoBehaviour
     public Rigidbody2D rb;
     public float move;
     public bool facingRight = true;
+    public float spawnX, spawnY;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spawnX = transform.position.x;
+        spawnY = transform.position.y;
     }
 
     // Update is called once per frame
@@ -35,5 +39,17 @@ public class PlMove : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+    }
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "DieCollider")
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        }
+        if (col.gameObject.tag == "Star")
+        {
+            Destroy(col.gameObject);
+        }
     }
 }
