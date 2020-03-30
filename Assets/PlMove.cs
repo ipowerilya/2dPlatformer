@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlMove : MonoBehaviour
 {
@@ -11,17 +12,22 @@ public class PlMove : MonoBehaviour
     public float move;
     public bool facingRight = true;
     public float spawnX, spawnY;
+    public int score;
+    public Text ScoreText;
+    public string LevelToLoad;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spawnX = transform.position.x;
         spawnY = transform.position.y;
+        score = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        ScoreText.text = "Score: " + score;
         move = Input.GetAxis("Horizontal");
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -46,10 +52,16 @@ public class PlMove : MonoBehaviour
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
+            score = 0;
         }
         if (col.gameObject.tag == "Star")
         {
             Destroy(col.gameObject);
+            score++;
+        }
+        if(col.gameObject.tag == "LvL")
+        {
+            SceneManager.LoadScene(LevelToLoad, LoadSceneMode.Single);
         }
     }
 }
